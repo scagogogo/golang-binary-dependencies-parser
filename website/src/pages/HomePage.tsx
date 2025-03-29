@@ -115,7 +115,7 @@ const HomePage: React.FC = () => {
   
   const examples: Examples = {
     basic: {
-      title: 'Basic Usage',
+      title: '基本用法',
       code: `package main
 
 import (
@@ -126,79 +126,79 @@ import (
 )
 
 func main() {
-	// Parse a binary file
+	// 解析二进制文件
 	info, err := gobinaryparser.ParseBinaryFromFile("/usr/local/bin/kubectl")
 	if err != nil {
-		log.Fatalf("Failed to parse binary: %v", err)
+		log.Fatalf("解析二进制文件失败: %v", err)
 	}
 	
-	// Print basic information
-	fmt.Printf("Binary: %s\\n", info.FilePath)
-	fmt.Printf("Main module: %s@%s\\n", info.Path, info.Version)
-	fmt.Printf("Go version: %s\\n", info.GoVersion)
-	fmt.Printf("Dependencies: %d\\n", len(info.Dependencies))
+	// 打印基本信息
+	fmt.Printf("二进制文件: %s\\n", info.FilePath)
+	fmt.Printf("主模块: %s@%s\\n", info.Path, info.Version)
+	fmt.Printf("Go版本: %s\\n", info.GoVersion)
+	fmt.Printf("依赖数量: %d\\n", len(info.Dependencies))
 	
-	// Print first 5 dependencies
+	// 打印前5个依赖
 	for i := 0; i < 5 && i < len(info.Dependencies); i++ {
 		dep := info.Dependencies[i]
 		fmt.Printf("%d. %s@%s\\n", i+1, dep.Path, dep.Version)
 		if dep.Replace != nil {
-			fmt.Printf("   (replaced with %s@%s)\\n", 
+			fmt.Printf("   (被替换为 %s@%s)\\n", 
 				dep.Replace.Path, dep.Replace.Version)
 		}
 	}
 }`
     },
     filtering: {
-      title: 'Filtering Dependencies',
-      code: `// Filter standard library dependencies
+      title: '依赖过滤',
+      code: `// 过滤标准库依赖
 stdlibDeps := info.FilterDependencies(func(dep gobinaryparser.DependencyInfo) bool {
 	return gobinaryparser.IsStdLib(dep.Path)
 })
-fmt.Printf("Standard library dependencies: %d\\n", len(stdlibDeps))
+fmt.Printf("标准库依赖数量: %d\\n", len(stdlibDeps))
 
-// Filter third-party dependencies
+// 过滤第三方依赖
 thirdPartyDeps := gobinaryparser.FilterStdLib(info.Dependencies)
-fmt.Printf("Third-party dependencies: %d\\n", len(thirdPartyDeps))
+fmt.Printf("第三方依赖数量: %d\\n", len(thirdPartyDeps))
 
-// Filter GitHub dependencies
+// 过滤GitHub依赖
 githubDeps := info.FilterDependencies(func(dep gobinaryparser.DependencyInfo) bool {
 	return strings.HasPrefix(dep.Path, "github.com/")
 })
-fmt.Printf("GitHub dependencies: %d\\n", len(githubDeps))`
+fmt.Printf("GitHub依赖数量: %d\\n", len(githubDeps))`
     },
     remote: {
-      title: 'Remote Binary Analysis',
-      code: `// Directly parse a binary from a URL
+      title: '远程二进制分析',
+      code: `// 直接从URL解析二进制文件
 info, err := gobinaryparser.ParseBinaryFromURL("https://example.com/path/to/binary")
 if err != nil {
-	log.Fatalf("Failed to parse remote binary: %v", err)
+	log.Fatalf("解析远程二进制文件失败: %v", err)
 }
 
-// Or with a timeout context
+// 或者使用超时上下文
 ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
 defer cancel()
 
 info, err = gobinaryparser.ParseBinaryFromURLWithContext(ctx, url)
 if err != nil {
-	log.Fatalf("Failed to parse remote binary: %v", err)
+	log.Fatalf("解析远程二进制文件失败: %v", err)
 }`
     },
     cli: {
-      title: 'CLI Tool Usage',
-      code: `# View basic dependency information
+      title: '命令行工具使用',
+      code: `# 查看基本依赖信息
 godeps /usr/local/bin/kubectl
 
-# Show only standard library dependencies
+# 只显示标准库依赖
 godeps stdlib /usr/local/bin/kubectl
 
-# Find a specific dependency (exact or partial match)
+# 查找特定依赖（精确或部分匹配）
 godeps find cobra /usr/local/bin/kubectl
 
-# Output in JSON format
+# 以JSON格式输出
 godeps --json /usr/local/bin/kubectl
 
-# Analyze all Go binaries in a directory
+# 分析目录中的所有Go二进制文件
 godeps scan /usr/local/bin`
     }
   };
@@ -206,95 +206,94 @@ godeps scan /usr/local/bin`
   return (
     <PageContainer>
       <Header>
-        <Title>GoBinaryParser</Title>
+        <Title>Go二进制依赖解析器</Title>
         <Subtitle>
-          A powerful Go library and CLI tool for extracting and analyzing dependency information
-          from Go binary files without source code.
+          一个强大的Go库和命令行工具，用于从Go二进制文件中提取和分析依赖信息，无需源代码。
         </Subtitle>
       </Header>
       
       <FeaturesGrid>
         <Feature>
           <FeatureIcon>🔍</FeatureIcon>
-          <FeatureTitle>Binary Analysis</FeatureTitle>
+          <FeatureTitle>二进制分析</FeatureTitle>
           <FeatureDescription>
-            Extract dependency information from any Go binary compiled with Go 1.12+, 
-            including module paths, versions, and replacement directives.
+            从任何使用Go 1.12+编译的Go二进制文件中提取依赖信息，
+            包括模块路径、版本和替换指令。
           </FeatureDescription>
         </Feature>
         
         <Feature>
           <FeatureIcon>🌐</FeatureIcon>
-          <FeatureTitle>Remote Binary Support</FeatureTitle>
+          <FeatureTitle>远程二进制支持</FeatureTitle>
           <FeatureDescription>
-            Analyze remote binaries directly from URLs without downloading the entire file,
-            using HTTP range requests to minimize data transfer.
+            直接从URL分析远程二进制文件，无需下载整个文件，
+            使用HTTP范围请求最小化数据传输。
           </FeatureDescription>
         </Feature>
         
         <Feature>
           <FeatureIcon>📊</FeatureIcon>
-          <FeatureTitle>Dependency Filtering</FeatureTitle>
+          <FeatureTitle>依赖过滤</FeatureTitle>
           <FeatureDescription>
-            Filter dependencies by various criteria like standard library vs third-party,
-            specific prefixes, or custom filtering functions.
+            通过各种条件过滤依赖，如标准库与第三方库、
+            特定前缀或自定义过滤函数。
           </FeatureDescription>
         </Feature>
         
         <Feature>
           <FeatureIcon>🔧</FeatureIcon>
-          <FeatureTitle>CLI Tool</FeatureTitle>
+          <FeatureTitle>命令行工具</FeatureTitle>
           <FeatureDescription>
-            Command-line interface for quick dependency analysis, with multiple
-            output formats including text and JSON.
+            用于快速依赖分析的命令行界面，支持多种
+            输出格式，包括文本和JSON。
           </FeatureDescription>
         </Feature>
         
         <Feature>
           <FeatureIcon>📚</FeatureIcon>
-          <FeatureTitle>Library API</FeatureTitle>
+          <FeatureTitle>库API</FeatureTitle>
           <FeatureDescription>
-            Use as a Go library in your own tools and applications with a
-            clean, well-documented API.
+            作为Go库在您自己的工具和应用程序中使用，
+            提供清晰、文档完善的API。
           </FeatureDescription>
         </Feature>
         
         <Feature>
           <FeatureIcon>🔒</FeatureIcon>
-          <FeatureTitle>No Source Required</FeatureTitle>
+          <FeatureTitle>无需源代码</FeatureTitle>
           <FeatureDescription>
-            Analyze closed-source binaries or executables without access to
-            the original source code or build environment.
+            分析闭源二进制文件或可执行文件，无需访问
+            原始源代码或构建环境。
           </FeatureDescription>
         </Feature>
       </FeaturesGrid>
       
       <ExampleSection>
-        <ExampleHeader>Code Examples</ExampleHeader>
+        <ExampleHeader>代码示例</ExampleHeader>
         <ExampleButtonsContainer>
           <ExampleButton 
             isActive={activeExampleTab === 'basic'} 
             onClick={() => setActiveExampleTab('basic')}
           >
-            Basic Usage
+            基本用法
           </ExampleButton>
           <ExampleButton 
             isActive={activeExampleTab === 'filtering'} 
             onClick={() => setActiveExampleTab('filtering')}
           >
-            Dependency Filtering
+            依赖过滤
           </ExampleButton>
           <ExampleButton 
             isActive={activeExampleTab === 'remote'} 
             onClick={() => setActiveExampleTab('remote')}
           >
-            Remote Binary Analysis
+            远程二进制分析
           </ExampleButton>
           <ExampleButton 
             isActive={activeExampleTab === 'cli'} 
             onClick={() => setActiveExampleTab('cli')}
           >
-            CLI Tool
+            命令行工具
           </ExampleButton>
         </ExampleButtonsContainer>
         

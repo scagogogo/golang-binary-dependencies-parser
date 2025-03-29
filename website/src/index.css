@@ -16,9 +16,19 @@ body {
   line-height: 1.6;
 }
 
+/* 基础代码样式 - 只用于内联代码 */
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* 内联代码样式 */
+:not(pre) > code {
+  background-color: #f1f5f9;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+  color: #0f172a;
 }
 
 a {
@@ -47,4 +57,45 @@ ul, ol {
 
 button {
   cursor: pointer;
+}
+
+/* 确保语法高亮组件样式正确 */
+.prism-code {
+  background: #282c34 !important;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace !important;
+}
+
+/* 行号样式修复 */
+.linenumber {
+  min-width: 2.5em !important;
+  padding-right: 1em !important;
+  text-align: right !important;
+  user-select: none !important;
+  color: #636d83 !important;
+  border-right: 1px solid #3e4451 !important;
+  margin-right: 1em !important;
+}
+
+/* 确保代码高亮样式规则不被覆盖 */
+pre[class*="language-"],
+code[class*="language-"] {
+  text-shadow: none !important;
+  direction: ltr !important;
+  text-align: left !important;
+  white-space: pre !important;
+  word-spacing: normal !important;
+  word-break: normal !important;
+  line-height: 1.5 !important;
+}
+
+/* 确保代码容器内没有额外的边距或填充 */
+pre[class*="language-"] {
+  margin: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+
+/* 确保滚动容器样式正确 */
+.react-syntax-highlighter-line-number {
+  display: inline-block !important;
 } 

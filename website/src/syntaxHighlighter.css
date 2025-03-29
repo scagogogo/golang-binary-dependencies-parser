@@ -1,0 +1,115 @@
+/* 语法高亮器样式覆盖 */
+
+/* 确保代码容器样式正确 */
+.react-syntax-highlighter-line-number {
+  display: inline-block !important;
+  min-width: 2.5em !important;
+  padding-right: 1em !important;
+  text-align: right !important;
+  color: #636d83 !important;
+  user-select: none !important;
+  margin-right: 0.5em !important;
+  border-right: 1px solid #3e4451 !important;
+}
+
+/* 修复行号容器 */
+.react-syntax-highlighter-line-numbers-rows {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: auto;
+  font-size: 100%;
+  letter-spacing: -1px;
+  border-right: 1px solid #3e4451;
+  user-select: none;
+}
+
+/* 设置代码区域样式 */
+pre {
+  background: #282c34 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+/* 确保代码容器内部的样式 */
+pre > code {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace !important;
+  white-space: pre !important;
+  background: transparent !important;
+  text-shadow: none !important;
+  color: #abb2bf !important;
+}
+
+/* 语法高亮颜色 - 基于 One Dark Pro 主题 */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #7f848e !important;
+  font-style: italic !important;
+}
+
+.token.punctuation {
+  color: #abb2bf !important;
+}
+
+.token.selector,
+.token.tag {
+  color: #e06c75 !important;
+}
+
+.token.property,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.attr-name,
+.token.deleted {
+  color: #d19a66 !important;
+}
+
+.token.string,
+.token.char,
+.token.attr-value,
+.token.builtin,
+.token.inserted {
+  color: #98c379 !important;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #56b6c2 !important;
+}
+
+.token.atrule,
+.token.keyword {
+  color: #c678dd !important;
+}
+
+.token.function {
+  color: #61afef !important;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #c678dd !important;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold !important;
+}
+
+.token.italic {
+  font-style: italic !important;
+}
+
+.token.entity {
+  cursor: help !important;
+} 

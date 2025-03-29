@@ -1,7 +1,8 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import './App.css';
+import './syntaxHighlighter.css';
 
 // Import pages
 import HomePage from './pages/HomePage';
@@ -41,6 +42,7 @@ const LogoIcon = styled.span`
 const NavLinks = styled.div`
   display: flex;
   gap: 1.5rem;
+  align-items: center;
 
   @media (max-width: 768px) {
     gap: 1rem;
@@ -60,6 +62,23 @@ const NavLink = styled(Link)`
 
   @media (max-width: 768px) {
     font-size: 0.9rem;
+  }
+`;
+
+const GitHubLink = styled.a`
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+  
+  &:hover {
+    color: #0ea5e9;
+  }
+  
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
   }
 `;
 
@@ -124,6 +143,13 @@ const Copyright = styled.div`
   margin-top: 2rem;
 `;
 
+// GitHub图标SVG组件
+const GitHubIcon = () => (
+  <svg viewBox="0 0 16 16" aria-hidden="true">
+    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+  </svg>
+);
+
 const App: React.FC = () => {
   return (
     <Router>
@@ -139,9 +165,14 @@ const App: React.FC = () => {
               <NavLink to="/documentation">文档</NavLink>
               <NavLink to="/examples">示例</NavLink>
               <NavLink to="/installation">安装</NavLink>
-              <ExternalLink href="https://github.com/scagogogo/golang-binary-dependencies-parser" target="_blank" rel="noopener noreferrer" style={{ color: '#e2e8f0' }}>
-                GitHub
-              </ExternalLink>
+              <GitHubLink 
+                href="https://github.com/scagogogo/golang-binary-dependencies-parser" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                title="GitHub仓库"
+              >
+                <GitHubIcon />
+              </GitHubLink>
             </NavLinks>
           </NavContainer>
         </NavBar>
