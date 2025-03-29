@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/golang-binary-dependencies-parser/static/css/main.207a4e83.css",
+    "main.js": "/golang-binary-dependencies-parser/static/js/main.0f493440.js",
+    "index.html": "/golang-binary-dependencies-parser/index.html",
+    "main.207a4e83.css.map": "/golang-binary-dependencies-parser/static/css/main.207a4e83.css.map",
+    "main.0f493440.js.map": "/golang-binary-dependencies-parser/static/js/main.0f493440.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.207a4e83.css",
+    "static/js/main.0f493440.js"
+  ]
+}

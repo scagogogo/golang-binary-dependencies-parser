@@ -1,0 +1,103 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go特有的文件
+*.o
+*.a
+*.test
+*.out
+*.prof
+*.cgo1.go
+*.cgo2.c
+_cgo_defun.c
+_cgo_gotypes.go
+_cgo_export.*
+_testmain.go
+go.work
+
+# 主程序编译输出
+/godeps
+/cmd/godeps/godeps
+
+# 测试目录和相关文件
+/test/
+/strip_test/
+*_test/
+*.test.bin
+**/testdata/
+
+# 依赖目录
+/vendor/
+
+# IDE相关
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+.history/
+*.sublime-workspace
+*.sublime-project
+
+# 操作系统相关
+Thumbs.db
+.DS_Store
+.directory
+
+# 日志文件
+*.log
+
+# 环境变量文件
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 自动生成的文件
+coverage.txt
+profile.out
+
+# 临时文件目录
+/tmp/
+/temp/
+
+# 二进制输出目录
+/bin/
+/dist/
+
+# Mac OS X 特有的文件
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows 特有的文件
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# Linux 特有的文件
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs* 
