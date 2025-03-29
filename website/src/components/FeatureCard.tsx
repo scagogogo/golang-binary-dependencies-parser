@@ -1,12 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-interface FeatureCardProps {
-  title: string;
-  description: string;
-  icon: string;
-}
-
 const Card = styled.div`
   background-color: white;
   border-radius: 8px;
@@ -36,6 +30,12 @@ const Description = styled.p`
   color: #64748b;
   line-height: 1.6;
 `;
+
+interface FeatureCardProps {
+  title: string;
+  description: string;
+  icon: string;
+}
 
 const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon }) => {
   return (

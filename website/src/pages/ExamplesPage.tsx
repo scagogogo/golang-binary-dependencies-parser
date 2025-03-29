@@ -2,154 +2,153 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import CodeBlock from '../components/CodeBlock';
 
-const PageContainer = styled.div`
-  max-width: 1000px;
+const Container = styled.div`
+  max-width: 900px;
   margin: 0 auto;
 `;
 
-const PageTitle = styled.h1`
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
+const Section = styled.section`
+  margin-bottom: 3rem;
+`;
+
+const Title = styled.h1`
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
   color: #0f172a;
+`;
+
+const Text = styled.p`
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  color: #334155;
 `;
 
 const TabsContainer = styled.div`
   display: flex;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
   margin-bottom: 2rem;
   overflow-x: auto;
 `;
 
-const Tab = styled.button<{ active: boolean }>`
+interface TabProps {
+  active: boolean;
+}
+
+const Tab = styled.button<TabProps>`
   padding: 0.75rem 1.5rem;
-  background-color: ${props => props.active ? '#f0f9ff' : 'transparent'};
-  color: ${props => props.active ? '#0ea5e9' : '#64748b'};
+  background: none;
   border: none;
-  border-bottom: 2px solid ${props => props.active ? '#0ea5e9' : 'transparent'};
-  margin-bottom: -2px;
-  font-size: 1rem;
-  font-weight: ${props => props.active ? '500' : 'normal'};
+  border-bottom: 3px solid ${props => props.active ? '#0ea5e9' : 'transparent'};
+  color: ${props => props.active ? '#0ea5e9' : '#64748b'};
+  font-weight: ${props => props.active ? 'bold' : 'normal'};
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.2s;
   white-space: nowrap;
   
   &:hover {
     color: #0ea5e9;
+    background-color: #f1f5f9;
   }
 `;
 
-const ExampleSection = styled.section`
-  margin-bottom: 3rem;
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 1.75rem;
-  margin-bottom: 1.5rem;
-  color: #0f172a;
-`;
-
-const SectionDescription = styled.p`
-  margin-bottom: 1.5rem;
-  color: #475569;
-  line-height: 1.7;
-`;
-
-const OutputContainer = styled.div`
-  margin-top: 2rem;
+const ExampleContainer = styled.div`
+  margin-bottom: 2rem;
 `;
 
 const OutputTitle = styled.h3`
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  margin: 1.5rem 0 1rem;
   color: #0f172a;
 `;
 
-// Example 1: Basic Parsing
-const example1Code = `package main
+const OutputBox = styled.div`
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 1rem;
+  border-radius: 8px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  margin-bottom: 2rem;
+`;
+
+interface Example {
+  code: string;
+  description: string;
+  output: string;
+}
+
+interface Examples {
+  [key: string]: Example;
+}
+
+const ExamplesPage: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<string>('basic');
+  
+  // 基本解析示例代码
+  const basicCode = `package main
 
 import (
   "fmt"
   "log"
   "os"
   "path/filepath"
-
+  
   "github.com/scagogogo/golang-binary-dependencies-parser/pkg/gobinaryparser"
 )
 
 func main() {
-  // Check if a binary file path is provided
+  // 检查是否提供了二进制文件路径
   if len(os.Args) < 2 {
-    fmt.Println("Usage: go run main.go <Go binary file path>")
-    fmt.Println("Example: go run main.go /usr/local/bin/go")
+    fmt.Println("用法: go run main.go <Go二进制文件路径>")
+    fmt.Println("例如: go run main.go /usr/local/bin/go")
     os.Exit(1)
   }
 
-  // Get the absolute path of the binary file
+  // 获取二进制文件的绝对路径
   binaryPath, err := filepath.Abs(os.Args[1])
   if err != nil {
-    log.Fatalf("Failed to resolve path: %v", err)
+    log.Fatalf("无法解析路径: %v", err)
   }
 
-  // Parse the binary file
+  // 解析二进制文件
   info, err := gobinaryparser.ParseBinaryFromFile(binaryPath)
   if err != nil {
-    log.Fatalf("Failed to parse binary file: %v", err)
+    log.Fatalf("解析二进制文件失败: %v", err)
   }
 
-  // Print basic information
-  fmt.Printf("📦 Go Binary File Dependency Analysis\\n\\n")
-  fmt.Printf("File: %s\\n", info.FilePath)
-  fmt.Printf("Main module: %s@%s\\n", info.Path, info.Version)
-  fmt.Printf("Go version: %s\\n", info.GoVersion)
+  // 打印基本信息
+  fmt.Printf("📦 Go 二进制文件依赖分析\\n\\n")
+  fmt.Printf("文件: %s\\n", info.FilePath)
+  fmt.Printf("主模块: %s@%s\\n", info.Path, info.Version)
+  fmt.Printf("Go版本: %s\\n", info.GoVersion)
 
-  // Print dependency information
-  fmt.Printf("\\nDependency count: %d\\n", len(info.Dependencies))
+  // 打印依赖信息
+  fmt.Printf("\\n依赖数量: %d\\n", len(info.Dependencies))
 
-  // Limit the number of dependencies to print to avoid too much output
+  // 限制打印的依赖数量，避免输出过多
   maxDeps := 10
   if len(info.Dependencies) < maxDeps {
     maxDeps = len(info.Dependencies)
   }
 
-  fmt.Printf("\\nFirst %d dependencies:\\n", maxDeps)
+  fmt.Printf("\\n前%d个依赖:\\n", maxDeps)
   for i := 0; i < maxDeps; i++ {
     dep := info.Dependencies[i]
     fmt.Printf("%d. %s@%s\\n", i+1, dep.Path, dep.Version)
     if dep.Replace != nil {
-      fmt.Printf("   (replaced with %s@%s)\\n", dep.Replace.Path, dep.Replace.Version)
+      fmt.Printf("   (被替换为 %s@%s)\\n", dep.Replace.Path, dep.Replace.Version)
     }
   }
 
-  // If there are more dependencies, show a hint
+  // 如果有更多依赖，显示提示信息
   if len(info.Dependencies) > maxDeps {
-    fmt.Printf("...and %d more dependencies\\n", len(info.Dependencies)-maxDeps)
+    fmt.Printf("...和 %d 个其他依赖\\n", len(info.Dependencies)-maxDeps)
   }
 }`;
 
-const example1Output = `📦 Go Binary File Dependency Analysis
-
-File: /usr/local/bin/kubectl
-Main module: k8s.io/kubectl@v0.24.0
-Go version: go1.18.2
-
-Dependency count: 157
-
-First 10 dependencies:
-1. github.com/Azure/go-ansiterm@v0.0.0-20210617225240-d185dfc1b5a1
-2. github.com/MakeNowJust/heredoc@v0.0.0-20170808103936-bb23615498cd
-3. github.com/davecgh/go-spew@v1.1.1
-4. github.com/docker/distribution@v2.8.1+incompatible
-   (replaced with github.com/distribution/distribution@v2.8.1+incompatible)
-5. github.com/spf13/cobra@v1.4.0
-6. github.com/spf13/pflag@v1.0.5
-7. github.com/stretchr/testify@v1.7.0
-8. golang.org/x/text@v0.3.7
-9. gopkg.in/yaml.v2@v2.4.0
-10. k8s.io/api@v0.24.0
-...and 147 more dependencies`;
-
-// Example 2: Filter Dependencies
-const example2Code = `package main
+  // 过滤依赖示例代码
+  const filterCode = `package main
 
 import (
   "fmt"
@@ -162,39 +161,39 @@ import (
 )
 
 func main() {
-  // Check if a binary file path is provided
+  // 检查是否提供了二进制文件路径
   if len(os.Args) < 2 {
-    fmt.Println("Usage: go run main.go <Go binary file path>")
-    fmt.Println("Example: go run main.go /usr/local/bin/go")
+    fmt.Println("用法: go run main.go <Go二进制文件路径>")
+    fmt.Println("例如: go run main.go /usr/local/bin/go")
     os.Exit(1)
   }
 
-  // Get the absolute path of the binary file
+  // 获取二进制文件的绝对路径
   binaryPath, err := filepath.Abs(os.Args[1])
   if err != nil {
-    log.Fatalf("Failed to resolve path: %v", err)
+    log.Fatalf("无法解析路径: %v", err)
   }
 
-  // Parse the binary file
+  // 解析二进制文件
   info, err := gobinaryparser.ParseBinaryFromFile(binaryPath)
   if err != nil {
-    log.Fatalf("Failed to parse binary file: %v", err)
+    log.Fatalf("解析二进制文件失败: %v", err)
   }
 
-  // Basic information
-  fmt.Printf("📦 Go Binary File Dependency Analysis - Filtering Example\\n\\n")
-  fmt.Printf("File: %s\\n", info.FilePath)
-  fmt.Printf("Go version: %s\\n", info.GoVersion)
-  fmt.Printf("Total dependency count: %d\\n", len(info.Dependencies))
+  // 基本信息
+  fmt.Printf("📦 Go 二进制文件依赖分析 - 过滤示例\\n\\n")
+  fmt.Printf("文件: %s\\n", info.FilePath)
+  fmt.Printf("Go版本: %s\\n", info.GoVersion)
+  fmt.Printf("总依赖数量: %d\\n", len(info.Dependencies))
 
-  // Example 1: Filter standard library dependencies
+  // 示例1: 过滤标准库依赖
   stdlibDeps := info.FilterDependencies(func(dep gobinaryparser.DependencyInfo) bool {
     return gobinaryparser.IsStdLib(dep.Path)
   })
-  fmt.Printf("\\nStandard library dependency count: %d\\n", len(stdlibDeps))
+  fmt.Printf("\\n标准库依赖数量: %d\\n", len(stdlibDeps))
 
   if len(stdlibDeps) > 0 {
-    fmt.Println("Standard library dependency examples:")
+    fmt.Println("标准库依赖示例:")
     limit := 5
     if len(stdlibDeps) < limit {
       limit = len(stdlibDeps)
@@ -204,18 +203,18 @@ func main() {
     }
   }
 
-  // Example 2: Filter non-standard library dependencies
+  // 示例2: 过滤第三方依赖
   thirdPartyDeps := gobinaryparser.FilterStdLib(info.Dependencies)
-  fmt.Printf("\\nThird-party dependency count: %d\\n", len(thirdPartyDeps))
+  fmt.Printf("\\n第三方依赖数量: %d\\n", len(thirdPartyDeps))
 
-  // Example 3: Filter dependencies with a specific prefix
+  // 示例3: 过滤包含特定前缀的依赖
   githubDeps := info.FilterDependencies(func(dep gobinaryparser.DependencyInfo) bool {
     return strings.HasPrefix(dep.Path, "github.com/")
   })
-  fmt.Printf("\\nGitHub dependency count: %d\\n", len(githubDeps))
+  fmt.Printf("\\nGitHub依赖数量: %d\\n", len(githubDeps))
 
   if len(githubDeps) > 0 {
-    fmt.Println("GitHub dependency examples:")
+    fmt.Println("GitHub依赖示例:")
     limit := 5
     if len(githubDeps) < limit {
       limit = len(githubDeps)
@@ -225,17 +224,17 @@ func main() {
     }
   }
 
-  // Example 4: Filter replaced dependencies
+  // 示例4: 过滤被替换的依赖
   replacedDeps := info.FilterDependencies(func(dep gobinaryparser.DependencyInfo) bool {
     return dep.Replace != nil
   })
-  fmt.Printf("\\nReplaced dependency count: %d\\n", len(replacedDeps))
+  fmt.Printf("\\n被替换的依赖数量: %d\\n", len(replacedDeps))
 
   if len(replacedDeps) > 0 {
-    fmt.Println("Replaced dependencies:")
+    fmt.Println("被替换的依赖:")
     for i, dep := range replacedDeps {
       if i >= 5 {
-        fmt.Printf("...and %d more replaced dependencies\\n", len(replacedDeps)-5)
+        fmt.Printf("...以及其他 %d 个被替换的依赖\\n", len(replacedDeps)-5)
         break
       }
       fmt.Printf("  - %s@%s => %s@%s\\n",
@@ -245,32 +244,8 @@ func main() {
   }
 }`;
 
-const example2Output = `📦 Go Binary File Dependency Analysis - Filtering Example
-
-File: /usr/local/bin/kubectl
-Go version: go1.18.2
-Total dependency count: 157
-
-Standard library dependency count: 0
-
-Third-party dependency count: 157
-
-GitHub dependency count: 102
-GitHub dependency examples:
-  - github.com/Azure/go-ansiterm@v0.0.0-20210617225240-d185dfc1b5a1
-  - github.com/MakeNowJust/heredoc@v0.0.0-20170808103936-bb23615498cd
-  - github.com/davecgh/go-spew@v1.1.1
-  - github.com/docker/distribution@v2.8.1+incompatible
-  - github.com/evanphx/json-patch@v4.12.0+incompatible
-
-Replaced dependency count: 3
-Replaced dependencies:
-  - github.com/docker/distribution@v2.8.1+incompatible => github.com/distribution/distribution@v2.8.1+incompatible
-  - github.com/googleapis/gnostic@v0.5.5 => github.com/google/gnostic@v0.5.5
-  - gopkg.in/yaml.v3@v3.0.0 => gopkg.in/yaml.v3@v3.0.0-20210107192922-496545a6307b`;
-
-// Example 3: Find Specific Dependencies
-const example3Code = `package main
+  // 查找特定依赖示例代码
+  const findCode = `package main
 
 import (
   "fmt"
@@ -283,113 +258,67 @@ import (
 )
 
 func main() {
-  // Check if dependency name and binary file path are provided
+  // 检查是否提供了二进制文件路径
   if len(os.Args) < 3 {
-    fmt.Println("Usage: go run main.go <dependency name> <Go binary file path>")
-    fmt.Println("Example: go run main.go cobra /usr/local/bin/go")
+    fmt.Println("用法: go run main.go <依赖名称> <Go二进制文件路径>")
+    fmt.Println("例如: go run main.go cobra /usr/local/bin/go")
     os.Exit(1)
   }
 
   searchTerm := os.Args[1]
   binaryPath, err := filepath.Abs(os.Args[2])
   if err != nil {
-    log.Fatalf("Failed to resolve path: %v", err)
+    log.Fatalf("无法解析路径: %v", err)
   }
 
-  // Parse the binary file
+  // 解析二进制文件
   info, err := gobinaryparser.ParseBinaryFromFile(binaryPath)
   if err != nil {
-    log.Fatalf("Failed to parse binary file: %v", err)
+    log.Fatalf("解析二进制文件失败: %v", err)
   }
 
-  // Basic information
-  fmt.Printf("🔍 Find Dependencies in Go Binary\\n\\n")
-  fmt.Printf("File: %s\\n", info.FilePath)
-  fmt.Printf("Go version: %s\\n", info.GoVersion)
-  fmt.Printf("Total dependency count: %d\\n", len(info.Dependencies))
+  // 基本信息
+  fmt.Printf("🔍 在二进制文件中查找依赖\\n\\n")
+  fmt.Printf("文件: %s\\n", info.FilePath)
+  fmt.Printf("Go版本: %s\\n", info.GoVersion)
+  fmt.Printf("总依赖数量: %d\\n", len(info.Dependencies))
 
-  // Method 1: Exact match using GetDependencyByPath
-  fmt.Printf("\\nMethod 1: Exact match for \\"%s\\"\\n", searchTerm)
+  // 方法1: 使用精确匹配 - GetDependencyByPath
+  fmt.Printf("\\n方法1: 精确匹配 \\"%s\\"\\n", searchTerm)
   dep := info.GetDependencyByPath(searchTerm)
   if dep != nil {
-    fmt.Printf("✅ Found exact match: %s@%s\\n", dep.Path, dep.Version)
+    fmt.Printf("✅ 找到完全匹配的依赖: %s@%s\\n", dep.Path, dep.Version)
     if dep.Replace != nil {
-      fmt.Printf("   Replaced with: %s@%s\\n", dep.Replace.Path, dep.Replace.Version)
+      fmt.Printf("   被替换为: %s@%s\\n", dep.Replace.Path, dep.Replace.Version)
     }
     if dep.Sum != "" {
-      fmt.Printf("   Checksum: %s\\n", dep.Sum)
+      fmt.Printf("   校验和: %s\\n", dep.Sum)
     }
   } else {
-    fmt.Printf("❌ No exact match found for \\"%s\\"\\n", searchTerm)
+    fmt.Printf("❌ 没有找到完全匹配 \\"%s\\" 的依赖\\n", searchTerm)
   }
 
-  // Method 2: Fuzzy match
-  fmt.Printf("\\nMethod 2: Fuzzy match for \\"%s\\"\\n", searchTerm)
+  // 方法2: 使用模糊匹配
+  fmt.Printf("\\n方法2: 模糊匹配包含 \\"%s\\" 的依赖\\n", searchTerm)
   matches := info.FilterDependencies(func(dep gobinaryparser.DependencyInfo) bool {
     return strings.Contains(dep.Path, searchTerm)
   })
 
   if len(matches) > 0 {
-    fmt.Printf("✅ Found %d matches:\\n", len(matches))
+    fmt.Printf("✅ 找到 %d 个匹配的依赖:\\n", len(matches))
     for i, dep := range matches {
       fmt.Printf("%d. %s@%s\\n", i+1, dep.Path, dep.Version)
       if dep.Replace != nil {
-        fmt.Printf("   Replaced with: %s@%s\\n", dep.Replace.Path, dep.Replace.Version)
+        fmt.Printf("   被替换为: %s@%s\\n", dep.Replace.Path, dep.Replace.Version)
       }
     }
   } else {
-    fmt.Printf("❌ No fuzzy matches found for \\"%s\\"\\n", searchTerm)
-  }
-
-  // Method 3: Check for specific version pattern
-  fmt.Printf("\\nMethod 3: Dependencies using specific versions\\n")
-  versionSearch := "v1."
-  versionMatches := info.FilterDependencies(func(dep gobinaryparser.DependencyInfo) bool {
-    return strings.HasPrefix(dep.Version, versionSearch)
-  })
-
-  if len(versionMatches) > 0 {
-    count := 5
-    if len(versionMatches) < count {
-      count = len(versionMatches)
-    }
-    fmt.Printf("✅ Found %d dependencies using v1.x versions, first %d:\\n", len(versionMatches), count)
-    for i := 0; i < count; i++ {
-      dep := versionMatches[i]
-      fmt.Printf("%d. %s@%s\\n", i+1, dep.Path, dep.Version)
-    }
-    if len(versionMatches) > count {
-      fmt.Printf("...and %d more dependencies\\n", len(versionMatches)-count)
-    }
-  } else {
-    fmt.Printf("❌ No dependencies found using v1.x versions\\n")
+    fmt.Printf("❌ 没有找到包含 \\"%s\\" 的依赖\\n", searchTerm)
   }
 }`;
 
-const example3Output = `🔍 Find Dependencies in Go Binary
-
-File: /usr/local/bin/kubectl
-Go version: go1.18.2
-Total dependency count: 157
-
-Method 1: Exact match for "cobra"
-❌ No exact match found for "cobra"
-
-Method 2: Fuzzy match for "cobra"
-✅ Found 1 match:
-1. github.com/spf13/cobra@v1.4.0
-
-Method 3: Dependencies using specific versions
-✅ Found 47 dependencies using v1.x versions, first 5:
-1. github.com/Azure/go-autorest/autorest/adal@v1.2.0
-2. github.com/Azure/go-autorest/autorest/date@v1.3.0
-3. github.com/Azure/go-autorest/logger@v1.0.3
-4. github.com/Azure/go-autorest/tracing@v1.0.3
-5. github.com/PuerkitoBio/purell@v1.1.1
-...and 42 more dependencies`;
-
-// Example 4: Remote Binary
-const example4Code = `package main
+  // 远程解析示例代码
+  const remoteCode = `package main
 
 import (
   "context"
@@ -402,64 +331,37 @@ import (
 )
 
 func main() {
-  // Check if URL is provided
+  // 检查是否提供了URL
   if len(os.Args) < 2 {
-    fmt.Println("Usage: go run main.go <Go binary file URL>")
-    fmt.Println("Example: go run main.go https://example.com/path/to/binary")
+    fmt.Println("用法: go run main.go <Go二进制文件URL>")
+    fmt.Println("例如: go run main.go https://example.com/path/to/binary")
     os.Exit(1)
   }
 
   url := os.Args[1]
-  fmt.Printf("🌐 Analyze Remote Go Binary\\n\\n")
+  fmt.Printf("🌐 解析远程Go二进制文件\\n\\n")
   fmt.Printf("URL: %s\\n", url)
 
-  // Create context with timeout
+  // 创建带有超时的上下文
   ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
   defer cancel()
 
-  // Method 1: Parse from URL with context
-  fmt.Println("\\nMethod 1: Parse directly from URL (with timeout context)")
+  // 使用URL直接解析（带上下文）
+  fmt.Println("\\n尝试解析远程二进制文件...")
   info, err := gobinaryparser.ParseBinaryFromURLWithContext(ctx, url)
   if err != nil {
-    fmt.Printf("❌ Failed to parse remote binary: %v\\n", err)
-    fmt.Println("\\nTrying alternative method...")
-  } else {
-    printBinaryInfo(info)
-    return
-  }
-
-  // Method 2: Parse from URL without context
-  fmt.Println("\\nMethod 2: Parse directly from URL (without context)")
-  info, err = gobinaryparser.ParseBinaryFromURL(url)
-  if err != nil {
-    fmt.Printf("❌ Failed to parse remote binary: %v\\n", err)
-    fmt.Println("\\nTrying alternative method...")
-  } else {
-    printBinaryInfo(info)
-    return
-  }
-
-  // Method 3: Parse using RemoteFile method (suitable for large binaries)
-  fmt.Println("\\nMethod 3: Using RemoteFile method (suitable for large binaries)")
-  info, err = gobinaryparser.ParseBinaryFromRemoteFile(url)
-  if err != nil {
-    fmt.Printf("❌ Failed to parse remote binary: %v\\n", err)
+    fmt.Printf("❌ 无法解析远程二进制文件: %v\\n", err)
     os.Exit(1)
   }
 
-  printBinaryInfo(info)
-}
+  // 打印基本信息
+  fmt.Printf("\\n✅ 成功解析远程二进制文件\\n")
+  fmt.Printf("主模块: %s@%s\\n", info.Path, info.Version)
+  fmt.Printf("Go版本: %s\\n", info.GoVersion)
+  fmt.Printf("依赖数量: %d\\n", len(info.Dependencies))
 
-// Print binary information
-func printBinaryInfo(info *gobinaryparser.BinaryInfo) {
-  // Print basic information
-  fmt.Printf("\\n✅ Successfully parsed remote binary\\n")
-  fmt.Printf("Main module: %s@%s\\n", info.Path, info.Version)
-  fmt.Printf("Go version: %s\\n", info.GoVersion)
-  fmt.Printf("Dependency count: %d\\n", len(info.Dependencies))
-
-  // Output detailed information as JSON
-  fmt.Println("\\nJSON output:")
+  // 以JSON格式输出部分依赖信息
+  fmt.Println("\\nJSON输出示例 (前5个依赖):")
 
   type OutputInfo struct {
     Path         string                          \`json:"path"\`
@@ -475,46 +377,106 @@ func printBinaryInfo(info *gobinaryparser.BinaryInfo) {
     Dependencies: info.Dependencies,
   }
 
-  // Limit dependencies to avoid too much output
+  // 限制依赖数量，避免输出过多
   if len(output.Dependencies) > 5 {
     output.Dependencies = output.Dependencies[:5]
   }
 
-  jsonData, err := json.MarshalIndent(output, "", "  ")
-  if err != nil {
-    fmt.Printf("Failed to generate JSON: %v\\n", err)
-    return
-  }
-
+  jsonData, _ := json.MarshalIndent(output, "", "  ")
   fmt.Println(string(jsonData))
 
   if len(info.Dependencies) > 5 {
-    fmt.Printf("\\n...showing first 5 dependencies out of %d\\n", len(info.Dependencies))
+    fmt.Printf("\\n...显示了前5个依赖，共有%d个\\n", len(info.Dependencies))
   }
 }`;
 
-const example4Output = `🌐 Analyze Remote Go Binary
+  // 示例输出
+  const examples: Examples = {
+    basic: {
+      code: basicCode,
+      description: '此示例展示了如何解析本地Go二进制文件并提取其基本依赖信息。它展示了如何获取主模块信息、Go版本以及依赖列表。',
+      output: `📦 Go 二进制文件依赖分析
 
-URL: https://example.com/path/to/binary
+文件: /usr/local/bin/kubectl
+主模块: k8s.io/kubectl@v0.24.0
+Go版本: go1.18.2
 
-Method 1: Parse directly from URL (with timeout context)
-❌ Failed to parse remote binary: HTTP error: 404 Not Found
+依赖数量: 157
 
-Trying alternative method...
+前10个依赖:
+1. github.com/Azure/go-ansiterm@v0.0.0-20210617225240-d185dfc1b5a1
+2. github.com/MakeNowJust/heredoc@v0.0.0-20170808103936-bb23615498cd
+3. github.com/davecgh/go-spew@v1.1.1
+4. github.com/docker/distribution@v2.8.1+incompatible
+   (被替换为 github.com/distribution/distribution@v2.8.1+incompatible)
+5. github.com/spf13/cobra@v1.4.0
+6. github.com/spf13/pflag@v1.0.5
+7. github.com/stretchr/testify@v1.7.0
+8. golang.org/x/text@v0.3.7
+9. gopkg.in/check.v1@v1.0.0-20200227125254-8fa46927fb4f
+10. k8s.io/klog/v2@v2.60.1
+...和 147 个其他依赖`
+    },
+    filter: {
+      code: filterCode,
+      description: '此示例展示了如何过滤依赖，包括筛选标准库依赖、第三方依赖、特定前缀的依赖（如 GitHub 依赖）以及被替换的依赖。',
+      output: `📦 Go 二进制文件依赖分析 - 过滤示例
 
-Method 2: Parse directly from URL (without context)
-❌ Failed to parse remote binary: HTTP error: 404 Not Found
+文件: /usr/local/bin/kubectl
+Go版本: go1.18.2
+总依赖数量: 157
 
-Trying alternative method...
+标准库依赖数量: 0
 
-Method 3: Using RemoteFile method (suitable for large binaries)
+第三方依赖数量: 157
 
-✅ Successfully parsed remote binary
-Main module: github.com/example/myapp@v1.2.3
-Go version: go1.18.2
-Dependency count: 42
+GitHub依赖数量: 102
+GitHub依赖示例:
+  - github.com/Azure/go-ansiterm@v0.0.0-20210617225240-d185dfc1b5a1
+  - github.com/MakeNowJust/heredoc@v0.0.0-20170808103936-bb23615498cd
+  - github.com/davecgh/go-spew@v1.1.1
+  - github.com/docker/distribution@v2.8.1+incompatible
+  - github.com/evanphx/json-patch@v4.12.0+incompatible
 
-JSON output:
+被替换的依赖数量: 3
+被替换的依赖:
+  - github.com/docker/distribution@v2.8.1+incompatible => github.com/distribution/distribution@v2.8.1+incompatible
+  - github.com/googleapis/gnostic@v0.5.5 => github.com/google/gnostic@v0.5.5
+  - gopkg.in/yaml.v3@v3.0.0 => gopkg.in/yaml.v3@v3.0.0-20210107192922-496545a6307b`
+    },
+    find: {
+      code: findCode,
+      description: '此示例展示了如何在二进制文件中查找特定依赖，包括精确匹配和部分匹配。这对于检查二进制文件是否使用了特定库或检查库的版本很有用。',
+      output: `🔍 在二进制文件中查找依赖
+
+文件: /usr/local/bin/kubectl
+Go版本: go1.18.2
+总依赖数量: 157
+
+方法1: 精确匹配 "github.com/spf13/cobra"
+✅ 找到完全匹配的依赖: github.com/spf13/cobra@v1.4.0
+   校验和: h1:y+wJpx64xcgO1V+RcnwW0LEHxTKRi2ZDPSBjWnrg88=
+
+方法2: 模糊匹配包含 "cobra" 的依赖
+✅ 找到 2 个匹配的依赖:
+1. github.com/russross/blackfriday/v2@v2.1.0
+2. github.com/spf13/cobra@v1.4.0`
+    },
+    remote: {
+      code: remoteCode,
+      description: '此示例展示了如何直接从URL解析远程二进制文件，无需先下载到本地。它使用HTTP Range请求只获取必要的部分，大大减少了数据传输量。',
+      output: `🌐 解析远程Go二进制文件
+
+URL: https://example.com/go-binary
+
+尝试解析远程二进制文件...
+
+✅ 成功解析远程二进制文件
+主模块: github.com/example/myapp@v1.2.3
+Go版本: go1.18.2
+依赖数量: 42
+
+JSON输出示例 (前5个依赖):
 {
   "path": "github.com/example/myapp",
   "version": "v1.2.3",
@@ -538,158 +500,76 @@ JSON output:
     {
       "path": "github.com/mattn/go-colorable",
       "version": "v0.1.12",
-      "sum": "h1:jF+Du6AlPIjs2BiUiQlKOX0rt3SujHxPnksPKZbaA40="
+      "sum": "h1:Y+zgqChV/opLWqYQOCQ4IRe5PYUQvobqKJ3TZQThSU4="
     },
     {
-      "path": "github.com/mattn/go-isatty",
-      "version": "v0.0.14",
-      "sum": "h1:yVuAays6BHfxijgZPzw+3Zlu5yQgKGP2/hcQbHb7S9Y="
+      "path": "golang.org/x/sys",
+      "version": "v0.0.0-20220412211240-33da011f77ad",
+      "sum": "h1:ntjMns5wyP/fN65tdBD4g8J5w8n015+iIIs9rtjXkY0="
     }
   ]
 }
 
-...showing first 5 dependencies out of 42`;
-
-const ExamplesPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('example1');
-
-  const renderExample = () => {
-    switch (activeTab) {
-      case 'example1':
-        return (
-          <ExampleSection>
-            <SectionTitle>01 - Basic Parsing</SectionTitle>
-            <SectionDescription>
-              This example demonstrates how to use the gobinaryparser package to parse a Go binary file
-              and display its basic information and dependencies. It shows how to extract the main module path,
-              version, Go version, and list the dependencies.
-            </SectionDescription>
-            <CodeBlock 
-              language="go" 
-              code={example1Code}
-              title="examples/01-basic-parsing/main.go"
-            />
-            <OutputContainer>
-              <OutputTitle>Example Output</OutputTitle>
-              <CodeBlock 
-                language="bash" 
-                code={example1Output}
-                showLineNumbers={false}
-              />
-            </OutputContainer>
-          </ExampleSection>
-        );
-      case 'example2':
-        return (
-          <ExampleSection>
-            <SectionTitle>02 - Filtering Dependencies</SectionTitle>
-            <SectionDescription>
-              This example shows how to filter dependencies from a Go binary file using various criteria.
-              It demonstrates filtering standard library dependencies, third-party dependencies, and dependencies
-              with specific prefixes or that have been replaced.
-            </SectionDescription>
-            <CodeBlock 
-              language="go" 
-              code={example2Code}
-              title="examples/02-filter-dependencies/main.go"
-            />
-            <OutputContainer>
-              <OutputTitle>Example Output</OutputTitle>
-              <CodeBlock 
-                language="bash" 
-                code={example2Output}
-                showLineNumbers={false}
-              />
-            </OutputContainer>
-          </ExampleSection>
-        );
-      case 'example3':
-        return (
-          <ExampleSection>
-            <SectionTitle>03 - Finding Specific Dependencies</SectionTitle>
-            <SectionDescription>
-              This example demonstrates different methods for finding specific dependencies in a Go binary file.
-              It shows how to perform exact matching using <code>GetDependencyByPath</code>, fuzzy matching using
-              <code>FilterDependencies</code> with a custom function, and finding dependencies that match specific
-              version patterns.
-            </SectionDescription>
-            <CodeBlock 
-              language="go" 
-              code={example3Code}
-              title="examples/03-find-specific/main.go"
-            />
-            <OutputContainer>
-              <OutputTitle>Example Output</OutputTitle>
-              <CodeBlock 
-                language="bash" 
-                code={example3Output}
-                showLineNumbers={false}
-              />
-            </OutputContainer>
-          </ExampleSection>
-        );
-      case 'example4':
-        return (
-          <ExampleSection>
-            <SectionTitle>04 - Remote Binary Analysis</SectionTitle>
-            <SectionDescription>
-              This example demonstrates how to analyze a Go binary file from a remote URL without downloading
-              the entire file. It shows various methods for remote binary parsing, including with timeout context,
-              and using the specialized <code>RemoteFile</code> method for large binaries.
-            </SectionDescription>
-            <CodeBlock 
-              language="go" 
-              code={example4Code}
-              title="examples/04-remote-binary/main.go"
-            />
-            <OutputContainer>
-              <OutputTitle>Example Output</OutputTitle>
-              <CodeBlock 
-                language="bash" 
-                code={example4Output}
-                showLineNumbers={false}
-              />
-            </OutputContainer>
-          </ExampleSection>
-        );
-      default:
-        return null;
+...显示了前5个依赖，共有42个`
     }
   };
 
+  const renderExample = () => {
+    const example = examples[activeTab];
+    
+    return (
+      <ExampleContainer>
+        <Text>{example.description}</Text>
+        <CodeBlock 
+          code={example.code} 
+          language="go" 
+          title="示例代码" 
+        />
+        <OutputTitle>示例输出</OutputTitle>
+        <OutputBox>{example.output}</OutputBox>
+      </ExampleContainer>
+    );
+  };
+
   return (
-    <PageContainer>
-      <PageTitle>Examples</PageTitle>
-      
-      <TabsContainer>
-        <Tab 
-          active={activeTab === 'example1'} 
-          onClick={() => setActiveTab('example1')}
-        >
-          01 - Basic Parsing
-        </Tab>
-        <Tab 
-          active={activeTab === 'example2'} 
-          onClick={() => setActiveTab('example2')}
-        >
-          02 - Filtering Dependencies
-        </Tab>
-        <Tab 
-          active={activeTab === 'example3'} 
-          onClick={() => setActiveTab('example3')}
-        >
-          03 - Finding Dependencies
-        </Tab>
-        <Tab 
-          active={activeTab === 'example4'} 
-          onClick={() => setActiveTab('example4')}
-        >
-          04 - Remote Binary
-        </Tab>
-      </TabsContainer>
-      
-      {renderExample()}
-    </PageContainer>
+    <Container>
+      <Section>
+        <Title>代码示例</Title>
+        <Text>
+          以下是使用 GoBinaryParser 库的几个示例代码。这些示例展示了库的主要功能，
+          如基本依赖解析、依赖过滤、特定依赖查找和远程二进制解析。
+        </Text>
+        
+        <TabsContainer>
+          <Tab 
+            active={activeTab === 'basic'} 
+            onClick={() => setActiveTab('basic')}
+          >
+            基本解析
+          </Tab>
+          <Tab 
+            active={activeTab === 'filter'} 
+            onClick={() => setActiveTab('filter')}
+          >
+            依赖过滤
+          </Tab>
+          <Tab 
+            active={activeTab === 'find'} 
+            onClick={() => setActiveTab('find')}
+          >
+            查找特定依赖
+          </Tab>
+          <Tab 
+            active={activeTab === 'remote'} 
+            onClick={() => setActiveTab('remote')}
+          >
+            远程二进制解析
+          </Tab>
+        </TabsContainer>
+        
+        {renderExample()}
+      </Section>
+    </Container>
   );
 };
 

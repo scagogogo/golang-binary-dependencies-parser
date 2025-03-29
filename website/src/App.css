@@ -45,6 +45,122 @@ button {
   cursor: pointer;
 }
 
+/* 代码高亮相关样式 */
 pre {
   overflow-x: auto;
+  background: #282a36 !important;
+  padding: 1rem !important;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+.line-numbers .line-numbers-rows {
+  border-right: 1px solid #44475a !important;
+  padding-right: 0.5rem !important;
+}
+
+.line-numbers-rows > span:before {
+  color: #6272a4 !important;
+}
+
+/* 自定义Prism主题颜色 */
+pre[class*="language-"] {
+  background: #282a36;
+  margin: 0;
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #f8f8f2;
+  text-shadow: none;
+  font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  line-height: 1.5;
+  tab-size: 4;
+  hyphens: none;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #6272a4;
+}
+
+.token.punctuation {
+  color: #f8f8f2;
+}
+
+.token.namespace {
+  opacity: 0.7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #ff79c6;
+}
+
+.token.boolean,
+.token.number {
+  color: #bd93f9;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #f1fa8c;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #ff79c6;
+}
+
+.token.function,
+.token.class-name {
+  color: #50fa7b;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #ffb86c;
+}
+
+.line-numbers .line-numbers-rows {
+  border-right: 1px solid #44475a;
+}
+
+.line-numbers-rows > span:before {
+  color: #6272a4;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
 } 

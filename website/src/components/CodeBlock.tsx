@@ -3,13 +3,6 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import styled from 'styled-components';
 
-interface CodeBlockProps {
-  code: string;
-  language: string;
-  showLineNumbers?: boolean;
-  title?: string;
-}
-
 const CodeContainer = styled.div`
   margin: 1.5rem 0;
   border-radius: 8px;
@@ -25,6 +18,13 @@ const CodeTitle = styled.div`
   font-size: 0.9rem;
   border-bottom: 1px solid #4a5568;
 `;
+
+interface CodeBlockProps {
+  code: string;
+  language: string;
+  showLineNumbers?: boolean;
+  title?: string;
+}
 
 const CodeBlock: React.FC<CodeBlockProps> = ({ 
   code, 

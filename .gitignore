@@ -100,4 +100,17 @@ $RECYCLE.BIN/
 .fuse_hidden*
 .directory
 .Trash-*
-.nfs* 
+.nfs*
+
+# Website 特定的忽略规则
+/website/node_modules
+/website/.pnp
+/website/.pnp.js
+/website/coverage
+/website/build
+/website/dist
+/website/npm-debug.log*
+/website/yarn-debug.log*
+/website/yarn-error.log*
+/website/.eslintcache
+/website/.env*.local 
